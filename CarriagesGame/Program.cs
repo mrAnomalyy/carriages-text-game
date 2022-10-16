@@ -6,6 +6,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
+            var debug = args.Length > 0 && args[0] == "debug";
             var random = new Random();
             var carriagesNumber = random.Next(2, 21);
             var carriages = new bool[carriagesNumber];
@@ -13,34 +14,84 @@ namespace ConsoleApp1
             {
                 carriages[i] = random.Next(0, 2) == 1;
             }
-            bool hasSolution = false;
-            bool quit = false;
+            var hasSolution = false;
+            var quit = false;
             int currentCarriageIndex = random.Next(0, carriagesNumber - 1);
+            var lastAction = "";
+            var lastActionMoveCounter = 0;
             while (!hasSolution && !quit)
             {
+                if (debug)
+                {
+                    Console.WriteLine(String.Format("\nDEBUG: currentCarriage: {0} of {1}\n", currentCarriageIndex, carriages.Length - 1));
+                    for (var i = 0; i < carriages.Length; i++)
+                    {
+                        Console.WriteLine(String.Format("DEBUG: {0} carriage light is {1}", i, carriages[i] ? "ON" : "OFF"));
+                    }
+                    Console.WriteLine("\n");
+                }
                 var isLightUp = carriages[currentCarriageIndex];
                 var lightUpStr = string.Format(
                         "This carriage is{0}lit up. What will you do? *forward* to go forward; *backward* to go backward; *switch* to switch light; *solution* to enter solution; *quit* to leave",
                         !isLightUp ? " not " : " "
                     );
                 Console.WriteLine(lightUpStr);
-                var userAction = Console.ReadLine();
+                var userInput = Console.ReadLine();
+                var parsed = userInput == null ? new string[] { "" } : userInput.Split(" ");
+                var userAction = parsed[0];
+
+                var userActionMultiplierStr = parsed.Length > 1 ? parsed[1] : "1";
+                int userActionMultiplier;
+
+                try
+                {
+                    userActionMultiplier = Convert.ToInt32(userActionMultiplierStr);
+                } catch
+                {
+                    userActionMultiplier = 1;
+                }
+
+
+                if (lastAction != userAction)
+                {
+                    lastActionMoveCounter = userActionMultiplier;
+                    lastAction = userAction;
+                }
+                else
+                {
+                    lastActionMoveCounter += userActionMultiplier;
+                }
+
 
                 if (userAction == "forward")
                 {
-                    currentCarriageIndex += 1;
+                    currentCarriageIndex += userActionMultiplier % carriages.Length;
+                    Console.WriteLine(
+                        String.Format(
+                            "Moving forward for {0} carriages. You already moved {1} in this direction in a row.",
+                            userActionMultiplier,
+                            lastActionMoveCounter
+                        )
+                    );
                     if (currentCarriageIndex > carriages.Length - 1)
                     {
-                        currentCarriageIndex = 0;
+                        currentCarriageIndex = currentCarriageIndex - carriages.Length;
                     }
                     continue;
                 }
                 if (userAction == "backward")
                 {
-                    currentCarriageIndex -= 1;
+                    currentCarriageIndex -= userActionMultiplier % carriages.Length;
+                    Console.WriteLine(
+                        String.Format(
+                            "Moving backward for {0} carriages. You already moved {1} in this direction in a row.",
+                            userActionMultiplier,
+                            lastActionMoveCounter
+                        )
+                    );
                     if (currentCarriageIndex < 0)
                     {
-                        currentCarriageIndex = carriages.Length - 1;
+                        currentCarriageIndex = carriages.Length + currentCarriageIndex;
                     }
                     continue;
                 }
@@ -90,6 +141,7 @@ namespace ConsoleApp1
                         Console.WriteLine(String.Format("Congratz! Your answer is correct. It is {0}", carriages.Length));
                     }
                 }
+                Console.WriteLine("Bad command.");
             }
             Console.WriteLine("Job is done. Or isn't. Whatever.");
             Console.WriteLine("Press any key to quit...");
