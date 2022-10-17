@@ -19,6 +19,11 @@ namespace ConsoleApp1
             int currentCarriageIndex = random.Next(0, carriagesNumber - 1);
             var lastAction = "";
             var lastActionMoveCounter = 0;
+
+            Console.WriteLine("Welcome to the carriages game. It based on a brainteaser from the internet.");
+            Console.WriteLine("It sounds this way: \"You woke up inside a train that is connected on it's beginning and the end and has random amount of carriages. The only thing you can do is to move inside that train and switch lighting on or off inside carriages. From the beggining, light may be (randomly) on or off. Your mission here is to count carriages count the most efficient but accurate way.\"");
+            Console.WriteLine("Well, let's try to get a solution here?\n");
+
             while (!hasSolution && !quit)
             {
                 if (debug)
