@@ -17,7 +17,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/CarriagesGame/bin/Debug/net6.0/CarriagesGame",
-            "args": ["debug<"],
+            "args": ["debug"],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console": "internalConsole"
