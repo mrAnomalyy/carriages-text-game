@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dotnet",
+			"task": "build /Users/anomalyy/Playground/carriages-text-game/CarriagesGame/CarriagesGame.csproj",
+			"file": "/Users/anomalyy/Playground/carriages-text-game/CarriagesGame/CarriagesGame.csproj",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "build"
+		}
+	]
+}
